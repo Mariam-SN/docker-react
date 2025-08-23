@@ -1,0 +1,15 @@
+name: react
+
+on:
+  push:
+    branches:
+      -master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: docker login -u $ {{sectrets.DOCKER_USERNAME}} -p $ {{sectrets.DOCKER_PASSWORD}}
+      - run: docker build -t Mariam-SN/react-app -f Dockerfile.dev
+      - run: docker run -e CI=true Mariam-SN/ract-app npm run test
