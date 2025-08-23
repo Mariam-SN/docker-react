@@ -1,0 +1,12 @@
+
+sudo: requird
+
+services:
+   -docker
+
+before_install:
+  - docker build -t Mariam-SN/docker-react -f  Dockerfile.dev
+
+script:
+  - docker run -e CI=true Mariam-SN/docker-react npm run test
+  
