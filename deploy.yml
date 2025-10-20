@@ -1,0 +1,25 @@
+name: deploy our microservices app
+
+on:
+  push:
+    branches:
+      -master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkouts@v2
+      - run: docker login -u ${{ screts.DOCKER_USERNAME }} -p ${{ secrtes.DOCKER_PASSWORD }}
+      - run: docker build -t ahmedgamil/react-test -f Dockerfile.dev .
+      - run: docker run -e CI=true ahmedgamil/react-test npm run test
+
+      - run: docker build -t ahmedgamil/multi-client ./client
+      - run: docker build -t ahmedgamil/multi-server ./server
+      - run: docker build -t ahmedgamil/multi-worker ./worker
+      - run: docker build -t ahmedgamil/multi-nginx ./nginx
+
+      - run: docker push ahmedgamil/multi-client
+      - run: docker push ahmedgamil/multi-server
+      - run: docker push ahmedgamil/multi-worker
+      - run: docker push ahmedgamil/multi-nginx
